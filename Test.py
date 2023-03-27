@@ -1,4 +1,3 @@
-from builtins import print
 import unittest
 import requests
 import settings
@@ -47,12 +46,12 @@ class TestAPI(unittest.TestCase):
             return self.token
 
     def test_a_health_check(self):
-        print("Run health check")
+        print("test a: Check health of application")
         response_health_check = requests.get(settings.APP_URL+'health')
         self.assertEqual(response_health_check.status_code, 200)
 
     def test_b_create_admin(self):
-        print("Run create admin check")
+        print("test b: check create admin")
         data = {
             'email':self.admin_email,
             'password':'1234',
@@ -66,7 +65,7 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response_login_check.status_code, 200)
     
     def test_c_login(self):
-        print("Run admin login check")
+        print("test c: check admin login")
         data = {
             'email':self.admin_email,
             'password':'1234'
@@ -78,7 +77,7 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response_login_check.status_code, 200)
     
     def test_d_users_list(self):
-        print("Run users list admin check")
+        print("test d: check users list")
         token = self.get_admin_token()
         headers = {
             'Authorization': token
@@ -86,17 +85,17 @@ class TestAPI(unittest.TestCase):
         users_list = requests.get(settings.APP_URL+'admin/get_users', headers=headers)
         self.assertEqual(users_list.status_code, 200)
 
-    def test_e_get_groups(self):
-        print("Run groups list admin check")
+    def test_e_get_chat_groups(self):
+        print("test e: check chat groups")
         token = self.get_admin_token()
         headers = {
             'Authorization': token
         }
-        users_list = requests.get(settings.APP_URL+'admin/get_groups', headers=headers)
+        users_list = requests.get(settings.APP_URL+'admin/get_chat_groups', headers=headers)
         self.assertEqual(users_list.status_code, 200)
 
     def test_f_create_user(self):
-        print("Run create user")
+        print("test f: Check create user")
         token = self.get_admin_token()
         data = {
             'email': self.user_email,
@@ -111,7 +110,7 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response_login_check.status_code, 200)
 
     def test_g_user_login(self):
-        print("Run login user")
+        print("test g: Check user login")
         data = {
             'email':self.user_email,
             'password':'1234'
@@ -123,7 +122,7 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response_login_check.status_code, 200)
 
     def test_h_create_group(self):
-        print("Run create group")
+        print("test h: Check create group")
         token = self.get_user_token()
         data = {
             'name':"Test"+str(random.randint(10,10000)),
@@ -135,17 +134,17 @@ class TestAPI(unittest.TestCase):
         response_login_check = requests.post(settings.APP_URL+'create-group', data = json.dumps(data), headers=headers)
         self.assertEqual(response_login_check.status_code, 200)
 
-    def test_i_get_user_groups(self):
-        print("Run user grous group")
+    def test_i_get_user_chat_groups(self):
+        print("test i: check user chat groups")
         token = self.get_user_token()
         headers = {
             'Authorization': token
         }
-        response_login_check = requests.get(settings.APP_URL+'groups-list', headers=headers)
+        response_login_check = requests.get(settings.APP_URL+'chat_groups-list', headers=headers)
         self.assertEqual(response_login_check.status_code, 200)
 
-    def test_j_search_groups(self):
-        print("Run search group")
+    def test_j_search_chat_groups(self):
+        print("test j: Check search chat group")
         token = self.get_user_token()
         params = {
             'search':'Te'
@@ -157,7 +156,7 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response_login_check.status_code, 200)
 
     def test_k_get_users(self):        
-        print("Run get users")
+        print("test k: Check get users")
         token = self.get_user_token()
         headers = {
             'Authorization': token
@@ -165,8 +164,8 @@ class TestAPI(unittest.TestCase):
         users_list = requests.post(settings.APP_URL+'users-list', headers=headers)
         self.assertEqual(users_list.status_code, 200)
 
-    def test_l_add_groups(self):
-        print("Run add users to group")
+    def test_l_add_chat_groups(self):
+        print("test l: Check add chat group")
         token = self.get_user_token()
         headers = {
             'Authorization': token
@@ -174,9 +173,9 @@ class TestAPI(unittest.TestCase):
         users_list = requests.post(settings.APP_URL+'users-list', headers=headers)
         users = users_list.json()
         user_id = users['Users'][0]['id']
-        response_login_check = requests.get(settings.APP_URL+'groups-list', headers=headers)
-        groups = (response_login_check.json())
-        group_id = groups['message'][0]['group_id']
+        response_login_check = requests.get(settings.APP_URL+'chat_groups-list', headers=headers)
+        chat_groups = (response_login_check.json())
+        group_id = chat_groups['message'][0]['group_id']
         data = {
             'group_id':group_id,
             'add_user': user_id,
@@ -189,14 +188,14 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response_login_check.status_code, 200)
     
     def test_m_add_message(self):
-        print("Run add message to group")
+        print("test m: Check add message to group")
         token = self.get_user_token()
         headers = {
             'Authorization': token
         }
-        response_login_check = requests.get(settings.APP_URL+'groups-list', headers=headers)
-        groups = (response_login_check.json())
-        group_id = groups['message'][0]['group_id']
+        response_login_check = requests.get(settings.APP_URL+'chat_groups-list', headers=headers)
+        chat_groups = (response_login_check.json())
+        group_id = chat_groups['message'][0]['group_id']
         data = {
             'group_id':group_id,
             'message': 'Text Message',

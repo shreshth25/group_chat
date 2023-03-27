@@ -21,7 +21,6 @@ def create_token(user_id):
         
     # decode jwt to convert into string
     decodedJwt = encodeJwt(payload)
-    print(decodedJwt)
     encodedJwt = decodedJwt.decode("utf-8")
     return encodedJwt
 

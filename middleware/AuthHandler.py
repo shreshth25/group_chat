@@ -26,8 +26,6 @@ class AuthHandler:
                 req.context['user_id'] = udata['id']
                 req.context['is_admin'] = udata['is_admin']
             else:
-                print("dsafa")
                 raise falcon.HTTPUnauthorized("Your session has expired. Kindly logout and login")
         else:
-            print("dsa")
             raise falcon.HTTPUnauthorized("Your session has expired. Kindly logout and login")

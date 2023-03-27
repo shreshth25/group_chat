@@ -15,13 +15,13 @@ class CreateMessage:
             group_id = data['group_id']
             message = data['message']
             current_datetime = datetime.now()
-            check_groups = """SELECT groups.id from groups where created_by = :user_id and groups.id= :group_id
+            check_chat_groups = """SELECT chat_groups.id from chat_groups where created_by = :user_id and chat_groups.id= :group_id
                                 UNION
                                 SELECT g.id FROM group_users
-                                join groups as g on g.id = group_users.group_id
+                                join chat_groups as g on g.id = group_users.group_id
                                 join users as u on u.id = g.created_by
                                 where group_users.user_id = :user_id and g.id= :group_id;"""
-            is_valid_group = fetchOne(session, check_groups, params={'user_id': user_id, 'group_id': group_id}, to_dict= True)
+            is_valid_group = fetchOne(session, check_chat_groups, params={'user_id': user_id, 'group_id': group_id}, to_dict= True)
             if is_valid_group:
                 message_insert = """insert into messages 
                 (group_id, created_by, message, created_at, updated_at)
@@ -51,13 +51,13 @@ class MessageList:
         user_id = req.context['user_id']
         data = req.context['data']
         group_id = data['group_id']
-        check_groups = """SELECT groups.id from groups where created_by = :user_id and groups.id= :group_id
+        check_chat_groups = """SELECT chat_groups.id from chat_groups where created_by = :user_id and chat_groups.id= :group_id
                             UNION
                             SELECT g.id FROM group_users
-                            join groups as g on g.id = group_users.group_id
+                            join chat_groups as g on g.id = group_users.group_id
                             join users as u on u.id = g.created_by
                             where group_users.user_id = :user_id and g.id= :group_id;"""
-        is_valid_group = fetchOne(session, check_groups, params={'user_id': user_id, 'group_id': group_id}, to_dict= True)
+        is_valid_group = fetchOne(session, check_chat_groups, params={'user_id': user_id, 'group_id': group_id}, to_dict= True)
         if is_valid_group:
             message_query = """select m.id, m.message, u.name from messages as m
             join users as u on u.id = m.created_by

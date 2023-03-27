@@ -9,12 +9,12 @@ all_users_with_roles_query = '''SELECT
 FROM
     users'''
 
-all_groups_query='''SELECT 
-    groups.name AS 'group_name', users.name AS 'created_by'
+all_chat_groups_query='''SELECT 
+    chat_groups.name AS 'group_name', users.name AS 'created_by'
 FROM
-    groups
+    chat_groups
         JOIN
-    users ON users.id = groups.created_by
+    users ON users.id = chat_groups.created_by
 '''
 
 logged_out_query='''
@@ -43,17 +43,17 @@ WHERE
 
 create_group_query = '''
 INSERT INTO 
-groups 
+chat_groups 
 (name, created_by, created_at, updated_at) 
 VALUES 
 (:name, :created_by, :current_datetime,:current_datetime)
 '''
 
 user_group_query = '''
-SELECT *, "You" as 'creator' from groups where created_by = :user_id
+SELECT *, "You" as 'creator' from chat_groups where created_by = :user_id
 UNION
 SELECT g.*, u.name as 'creator' FROM group_users
-join groups as g on g.id = group_users.group_id
+join chat_groups as g on g.id = group_users.group_id
 join users as u on u.id = g.created_by
 where group_users.user_id = :user_id
 '''
@@ -62,16 +62,16 @@ check_if_user_can_like_message_query='''
 SELECT 
     m.id
 FROM
-    groups
-JOIN messages as m on m.group_id = groups.id
+    chat_groups
+JOIN messages as m on m.group_id = chat_groups.id
 WHERE
-    groups.created_by= :user_id and m.id= :message_id
+    chat_groups.created_by= :user_id and m.id= :message_id
 UNION SELECT 
     m.id
 FROM
     group_users
         JOIN
-    groups AS g ON g.id = group_users.group_id
+    chat_groups AS g ON g.id = group_users.group_id
         JOIN
     users AS u ON u.id = g.created_by
         JOIN
@@ -97,10 +97,10 @@ values
 '''
 
 user_group_search_query='''
-SELECT *, "You" as 'creator' from groups where created_by = {} and name like "%{}%"
+SELECT *, "You" as 'creator' from chat_groups where created_by = {} and name like "%{}%"
 UNION
 SELECT g.*, u.name as 'creator' FROM group_users
-join groups as g on g.id = group_users.group_id
+join chat_groups as g on g.id = group_users.group_id
 join users as u on u.id = g.created_by
 where group_users.user_id = {} and g.name like "%{}%"
 '''

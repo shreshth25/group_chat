@@ -19,7 +19,7 @@ V1Routes = {
     ADMIN+'/create_user':AdminController.CreateUser(),
     ADMIN+'/update_user':AdminController.UpdateUser(), #tobedone
     ADMIN+'/get_users':AdminController.Users(),
-    ADMIN+'/get_groups':AdminController.Groups(),
+    ADMIN+'/get_chat_groups':AdminController.chat_groups(),
 
     #Authentication
     "/login":AuthController.Login(),
@@ -28,10 +28,10 @@ V1Routes = {
     #users
     "/users-list": GroupController.UsersList(),
     "/create-group": GroupController.CreateGroup(),
-    "/groups-list": GroupController.GroupList(),
+    "/chat_groups-list": GroupController.GroupList(),
     "/search-group": GroupController.SearchGroup(),
     "/delete-group": GroupController.GroupList(), #tobedone
-    "/add-user": GroupController.AddUser(), #fortest
+    "/add-user": GroupController.AddUser(),
 
     #messages
     "/create-message": MessageController.CreateMessage(),

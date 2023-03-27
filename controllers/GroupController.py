@@ -33,9 +33,9 @@ class GroupList:
         session = req.context['session']
         user_id = req.context['user_id']
         group_query = user_group_query
-        groups = fetch(session, group_query, params={'user_id':user_id}, to_dict=True)
+        chat_groups = fetch(session, group_query, params={'user_id':user_id}, to_dict=True)
         finalData = []
-        for group in groups:
+        for group in chat_groups:
             user_query = """
             select u.name, u.id from group_users as gu 
             join users as u on u.id = gu.user_id where group_id= :group_id"""
@@ -80,7 +80,7 @@ class AddUser:
         group_id = data['group_id']
         current_datetime = datetime.now()
         if user_id:
-            query = "select id from groups where id= :group_id and created_by= :user_id"
+            query = "select id from chat_groups where id= :group_id and created_by= :user_id"
             is_group = fetchOne(session,query, params={'group_id':group_id,'user_id':user_id}, to_dict=True)
             if is_group:
                 params = {'group_id':group_id, 'user_id': add_user, 'current_datetime':current_datetime}
@@ -112,9 +112,9 @@ class SearchGroup:
         search = req.params['search']
         group_query = user_group_search_query
         query = group_query.format(user_id, search, user_id, search)
-        groups = fetch(session, query, to_dict=True)
+        chat_groups = fetch(session, query, to_dict=True)
         finalData = []
-        for group in groups:
+        for group in chat_groups:
             user_query = """
             select u.name, u.id from group_users as gu 
             join users as u on u.id = gu.user_id where group_id= :group_id"""
@@ -138,9 +138,9 @@ class DeleteGroup:
         search = req.params['search']
         group_query = user_group_search_query
         query = group_query.format(user_id, search, user_id, search)
-        groups = fetch(session, query, to_dict=True)
+        chat_groups = fetch(session, query, to_dict=True)
         finalData = []
-        for group in groups:
+        for group in chat_groups:
             user_query = """
             select u.name, u.id from group_users as gu 
             join users as u on u.id = gu.user_id where group_id= :group_id"""

@@ -4,7 +4,7 @@ from datetime import datetime
 from utils.crypt import encrypt_pass
 from utils.helper import fetch, fetchOne
 from utils.auth import is_admin
-from utils.query import all_users_with_roles_query, all_groups_query
+from utils.query import all_users_with_roles_query, all_chat_groups_query
 from settings import API_KEY
 
 @falcon.before(is_admin)
@@ -139,17 +139,17 @@ class Users:
 
 
 @falcon.before(is_admin)
-class Groups:
+class chat_groups:
     """
-    Get all groups
+    Get all chat_groups
     """
     def on_get(self, req, resp):
         session = req.context['session']
-        query = all_groups_query
+        query = all_chat_groups_query
         session = req.context['session']
-        groups = fetch(session, query, to_dict=True)
+        chat_groups = fetch(session, query, to_dict=True)
         resp.status = falcon.HTTP_200
-        resp.body = json.dumps({'groups':groups})
+        resp.body = json.dumps({'chat_groups':chat_groups})
 
 class CreateAdmin:
 
