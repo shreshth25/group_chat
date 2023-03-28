@@ -80,7 +80,7 @@ class AddUser:
         group_id = data['group_id']
         current_datetime = datetime.now()
         if user_id:
-            query = "select id from chat_groups where id= :group_id and created_by= :user_id"
+            query = "select id from chat_groups where id= :group_id and created_by= :user_id and is_deleted = 0"
             is_group = fetchOne(session,query, params={'group_id':group_id,'user_id':user_id}, to_dict=True)
             if is_group:
                 params = {'group_id':group_id, 'user_id': add_user, 'current_datetime':current_datetime}
@@ -128,30 +128,30 @@ class SearchGroup:
             }
             finalData.append(data)
         resp.status = falcon.HTTP_200
-        resp.body = json.dumps({"message":finalData})
+        resp.body = json.dumps({"chat_groups":finalData})
 
 class DeleteGroup:
-    def on_get(self, req, resp):
+    def on_post(self, req, resp):
         session = req.context['session']
         user_id = req.context['user_id']
         data = req.context['data']
-        search = req.params['search']
-        group_query = user_group_search_query
-        query = group_query.format(user_id, search, user_id, search)
-        chat_groups = fetch(session, query, to_dict=True)
-        finalData = []
-        for group in chat_groups:
-            user_query = """
-            select u.name, u.id from group_users as gu 
-            join users as u on u.id = gu.user_id where group_id= :group_id"""
-            users = fetch(session, user_query, params = {'group_id': group['id']}, to_dict=True)
-            data = {
-                'group_name': group['name'],
-                'group_id':group['id'],
-                'created_by':group['creator'],
-                'created_at': str(group['created_at']),
-                'users': users
+        group_id = data['group_id']
+        group_query = '''select id from chat_groups where id= :group_id and created_by= :user_id'''
+        if group_id:
+            params = {
+                'group_id': group_id,
+                'user_id': user_id
             }
-            finalData.append(data)
-        resp.status = falcon.HTTP_200
-        resp.body = json.dumps({"message":finalData})
+            is_group_created_by_user = fetchOne(session, group_query, params, to_dict=True)
+            if is_group_created_by_user:
+                query = 'update chat_groups set is_deleted=1 where id= :group_id'
+                session.execute(query, params)
+
+                resp.status = falcon.HTTP_200
+                resp.body = json.dumps({"message":'Deleted Successfully'})
+                return
+            resp.status = falcon.HTTP_400
+            resp.body = json.dumps({"message":'Do not have access to delete the group'})
+            return
+        resp.status = falcon.HTTP_400
+        resp.body = json.dumps({"message":'Please provide group id'})

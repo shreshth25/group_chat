@@ -107,22 +107,16 @@ class UpdateUser:
     def on_post(self, req, resp):
         req_data = req.context['data']
         session = req.context['session']
-        name = req_data.get('name')
-        email = req_data.get('email')
-        password = req_data.get('password')
         user_id = req_data.get('user_id')
-        current_datetime = datetime.now()
-        password = encrypt_pass(password).decode('ascii')
-        query = 'insert into users (email,password,name,created_at,updated_at) values (:email,:password,:name,:current_datetime,:current_datetime)'
+        name = req_data.get('name')
         params = {
-            'email':email,
-            'password':password,
-            'name':name,
-            'current_datetime':current_datetime
+            'id':user_id,
+            'name':name
         }
+        query = """update users set name =:name where id = :id"""
         session.execute(query,params)
         resp.status = falcon.HTTP_200
-        resp.body = json.dumps({"message":"Created"})
+        resp.body = json.dumps({"message":"User Information updated successfully."})
 
 @falcon.before(is_admin)
 class Users:

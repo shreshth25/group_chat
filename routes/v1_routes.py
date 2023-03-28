@@ -15,11 +15,11 @@ V1Routes = {
     "/health": HealthController.AppHealthCheck(),
 
     #Admin routes
-    ADMIN+'/create_admin': AdminController.CreateAdmin(),
-    ADMIN+'/create_user':AdminController.CreateUser(),
-    ADMIN+'/update_user':AdminController.UpdateUser(), #tobedone
-    ADMIN+'/get_users':AdminController.Users(),
-    ADMIN+'/get_chat_groups':AdminController.chat_groups(),
+    ADMIN+'/create-admin': AdminController.CreateAdmin(),
+    ADMIN+'/create-user':AdminController.CreateUser(),
+    ADMIN+'/update-user':AdminController.UpdateUser(),
+    ADMIN+'/get-users':AdminController.Users(),
+    ADMIN+'/get-chat-groups':AdminController.chat_groups(),
 
     #Authentication
     "/login":AuthController.Login(),
@@ -28,9 +28,9 @@ V1Routes = {
     #users
     "/users-list": GroupController.UsersList(),
     "/create-group": GroupController.CreateGroup(),
-    "/chat_groups-list": GroupController.GroupList(),
+    "/chat-groups-list": GroupController.GroupList(),
     "/search-group": GroupController.SearchGroup(),
-    "/delete-group": GroupController.GroupList(), #tobedone
+    "/delete-group": GroupController.DeleteGroup(), #tobedone
     "/add-user": GroupController.AddUser(),
 
     #messages

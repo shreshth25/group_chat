@@ -14,7 +14,7 @@ all_chat_groups_query='''SELECT
 FROM
     chat_groups
         JOIN
-    users ON users.id = chat_groups.created_by
+    users ON users.id = chat_groups.created_by where chat_groups.is_deleted = 0
 '''
 
 logged_out_query='''
@@ -50,12 +50,12 @@ VALUES
 '''
 
 user_group_query = '''
-SELECT *, "You" as 'creator' from chat_groups where created_by = :user_id
+SELECT *, "You" as 'creator' from chat_groups where created_by = :user_id and is_deleted = 0
 UNION
 SELECT g.*, u.name as 'creator' FROM group_users
 join chat_groups as g on g.id = group_users.group_id
 join users as u on u.id = g.created_by
-where group_users.user_id = :user_id
+where group_users.user_id = :user_id and g.is_deleted = 0
 '''
 
 check_if_user_can_like_message_query='''
@@ -65,7 +65,7 @@ FROM
     chat_groups
 JOIN messages as m on m.group_id = chat_groups.id
 WHERE
-    chat_groups.created_by= :user_id and m.id= :message_id
+    chat_groups.created_by= :user_id and m.id= :message_id and chat_groups.is_deleted = 0
 UNION SELECT 
     m.id
 FROM
@@ -77,7 +77,7 @@ FROM
         JOIN
     messages AS m ON m.group_id = g.id
 WHERE
-    group_users.user_id= :user_id and m.id= :message_id
+    group_users.user_id= :user_id and m.id= :message_id and chat_groups.is_deleted = 0
 '''
 
 already_liked_query = '''
@@ -97,10 +97,10 @@ values
 '''
 
 user_group_search_query='''
-SELECT *, "You" as 'creator' from chat_groups where created_by = {} and name like "%{}%"
+SELECT *, "You" as 'creator' from chat_groups where created_by = {} and is_deleted = 0 and name like "%{}%"
 UNION
 SELECT g.*, u.name as 'creator' FROM group_users
 join chat_groups as g on g.id = group_users.group_id
 join users as u on u.id = g.created_by
-where group_users.user_id = {} and g.name like "%{}%"
+where group_users.user_id = {} and g.name like "%{}%" and g.is_deleted = 0
 '''

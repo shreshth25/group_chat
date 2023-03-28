@@ -61,7 +61,7 @@ class TestAPI(unittest.TestCase):
         headers = {
         'Content-Type': 'application/json',
         }
-        response_login_check = requests.post(settings.APP_URL+'admin/create_admin', data = json.dumps(data), headers=headers)
+        response_login_check = requests.post(settings.APP_URL+'admin/create-admin', data = json.dumps(data), headers=headers)
         self.assertEqual(response_login_check.status_code, 200)
     
     def test_c_login(self):
@@ -82,7 +82,7 @@ class TestAPI(unittest.TestCase):
         headers = {
             'Authorization': token
         }
-        users_list = requests.get(settings.APP_URL+'admin/get_users', headers=headers)
+        users_list = requests.get(settings.APP_URL+'admin/get-users', headers=headers)
         self.assertEqual(users_list.status_code, 200)
 
     def test_e_get_chat_groups(self):
@@ -91,7 +91,7 @@ class TestAPI(unittest.TestCase):
         headers = {
             'Authorization': token
         }
-        users_list = requests.get(settings.APP_URL+'admin/get_chat_groups', headers=headers)
+        users_list = requests.get(settings.APP_URL+'admin/get-chat-groups', headers=headers)
         self.assertEqual(users_list.status_code, 200)
 
     def test_f_create_user(self):
@@ -106,7 +106,7 @@ class TestAPI(unittest.TestCase):
             'Content-Type': 'application/json',
             'Authorization': token
         }
-        response_login_check = requests.post(settings.APP_URL+'admin/create_user', data = json.dumps(data), headers=headers)
+        response_login_check = requests.post(settings.APP_URL+'admin/create-user', data = json.dumps(data), headers=headers)
         self.assertEqual(response_login_check.status_code, 200)
 
     def test_g_user_login(self):
@@ -140,7 +140,7 @@ class TestAPI(unittest.TestCase):
         headers = {
             'Authorization': token
         }
-        response_login_check = requests.get(settings.APP_URL+'chat_groups-list', headers=headers)
+        response_login_check = requests.get(settings.APP_URL+'chat-groups-list', headers=headers)
         self.assertEqual(response_login_check.status_code, 200)
 
     def test_j_search_chat_groups(self):
@@ -173,7 +173,7 @@ class TestAPI(unittest.TestCase):
         users_list = requests.post(settings.APP_URL+'users-list', headers=headers)
         users = users_list.json()
         user_id = users['Users'][0]['id']
-        response_login_check = requests.get(settings.APP_URL+'chat_groups-list', headers=headers)
+        response_login_check = requests.get(settings.APP_URL+'chat-groups-list', headers=headers)
         chat_groups = (response_login_check.json())
         group_id = chat_groups['message'][0]['group_id']
         data = {
@@ -193,7 +193,7 @@ class TestAPI(unittest.TestCase):
         headers = {
             'Authorization': token
         }
-        response_login_check = requests.get(settings.APP_URL+'chat_groups-list', headers=headers)
+        response_login_check = requests.get(settings.APP_URL+'chat-groups-list', headers=headers)
         chat_groups = (response_login_check.json())
         group_id = chat_groups['message'][0]['group_id']
         data = {

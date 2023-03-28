@@ -6,7 +6,7 @@ from utils.query import check_if_logged_out
 
 class AuthHandler:
     def process_request(self, req, resp):
-        bypass_list = ['login','faker','health','create_admin']
+        bypass_list = ['login','faker','health','create-admin']
         url = req.uri.split("/")[-1]
         if url in bypass_list:
             return   
