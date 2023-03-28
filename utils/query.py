@@ -77,7 +77,7 @@ FROM
         JOIN
     messages AS m ON m.group_id = g.id
 WHERE
-    group_users.user_id= :user_id and m.id= :message_id and chat_groups.is_deleted = 0
+    group_users.user_id= :user_id and m.id= :message_id and g.is_deleted = 0
 '''
 
 already_liked_query = '''
